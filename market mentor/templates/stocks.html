@@ -1,0 +1,7 @@
+{% for stock in stocks %}
+    <div>
+        <h3>{{ stock.name }} ({{ stock.symbol }})</h3>
+        <p>Price: ₹{{ stock.price }}</p>
+        <a href="{{ url_for('buy_stock', stock_id=stock.id) }}">Buy</a> | <a href="{{ url_for('sell_stock', stock_id=stock.id) }}">Sell</a>
+    </div>
+{% endfor %}

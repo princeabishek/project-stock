@@ -1,0 +1,7 @@
+<form method="POST">
+    <h2>Buy {{ stock.name }}</h2>
+    <p>Price: ₹{{ stock.price }}</p>
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" min="1" required>
+    <button type="submit">Buy</button>
+</form>

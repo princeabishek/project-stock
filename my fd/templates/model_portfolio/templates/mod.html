@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Market Mentor - Stock Portfolio Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .stock-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stock-list,
+        .portfolio-section {
+            width: 45%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        input[type="number"] {
+            width: 70px;
+        }
+
+        .price-change-up {
+            color: green;
+        }
+
+        .price-change-down {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Market Mentor - Stock Portfolio Simulator</h1>
+
+    <div class="stock-section">
+        <div class="stock-list">
+            <h2>Stock Prices</h2>
+            <table id="stock-prices">
+                <thead>
+                    <tr>
+                        <th>Stock</th>
+                        <th>Current Price</th>
+                        <th>Buy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock, name in stocks.items() %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td id="{{ stock }}-price">{{ prices[stock] }}</td>
+                        <td>
+                            <input type="number" id="{{ stock }}-quantity" min="0" value="0">
+                            <button onclick="buyStock('{{ stock }}')">Buy</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="portfolio-section">
+            <h2>Your Portfolio</h2>
+            <p>Available Cash: ₹<span id="cash-balance">{{ cash }}</span></p>
+            <table id="portfolio-stocks">
+                <thead>
+                    <tr>
+                        <th>Stock</th>
+                        <th>Quantity</th>
+                        <th>Sell</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock, quantity in portfolio.items() %}
+                    <tr>
+                        <td>{{ stocks[stock] }}</td>
+                        <td>{{ quantity }}</td>
+                        <td>
+                            <input type="number" id="{{ stock }}-sell-quantity" min="0" value="0" max="{{ quantity }}">
+                            <button onclick="sellStock('{{ stock }}')">Sell</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <button onclick="simulateTimePassage()">Simulate 2 Hours</button>
+    </div>
+
+    <div id="price-changes"></div>
+
+    <script>
+        function buyStock(stock) {
+            const quantity = document.getElementById(stock + '-quantity').value;
+            fetch('/buy', {
+                method: 'POST',
+                body: new URLSearchParams({ stock: stock, quantity: quantity }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cash-balance').textContent = data.cash;
+                        updatePortfolioTable(data.portfolio);
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+
+        function sellStock(stock) {
+            const quantity = document.getElementById(stock + '-sell-quantity').value;
+            fetch('/sell', {
+                method: 'POST',
+                body: new URLSearchParams({ stock: stock, quantity: quantity }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cash-balance').textContent = data.cash;
+                        updatePortfolioTable(data.portfolio);
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+
+        function updatePortfolioTable(portfolio) {
+            {% for stock in stocks %}
+            document.querySelector('#portfolio-stocks tbody tr:nth-child({{ loop.index }}) td:nth-child(2)').textContent = portfolio['{{ stock }}'];
+            {% endfor %}
+        }
+
+        function simulateTimePassage() {
+            fetch('/simulate_time', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    const changesDiv = document.getElementById('price-changes');
+                    changesDiv.innerHTML = '<h3>Price Changes</h3>';
+
+                    {% for stock in stocks %}
+                    const oldPrice = data.old_prices['{{ stock }}'];
+                    const newPrice = data.new_prices['{{ stock }}'];
+                    const priceElement = document.getElementById('{{ stock }}-price');
+
+                    priceElement.textContent = newPrice.toFixed(2);
+
+                    if (newPrice > oldPrice) {
+                        priceElement.classList.add('price-change-up');
+                        priceElement.classList.remove('price-change-down');
+                    } else if (newPrice < oldPrice) {
+                        priceElement.classList.add('price-change-down');
+                        priceElement.classList.remove('price-change-up');
+                    }
+
+                    changesDiv.innerHTML += `
+                    <p>{{ stocks[stock] }}: 
+                        ${oldPrice.toFixed(2)} → ${newPrice.toFixed(2)} 
+                        (${((newPrice - oldPrice) / oldPrice * 100).toFixed(2)}%)
+                    </p>
+                `;
+                    {% endfor %}
+                });
+        }
+    </script>
+</body>
+
+</html>

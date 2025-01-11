@@ -1,0 +1,16 @@
+<h2>Your Portfolio</h2>
+<p>Balance: ₹{{ balance }}</p>
+<table>
+    <tr>
+        <th>Stock</th>
+        <th>Quantity</th>
+        <th>Total Value</th>
+    </tr>
+    {% for item in portfolio %}
+        <tr>
+            <td>{{ item.stock.name }} ({{ item.stock.symbol }})</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.total_value }}</td>
+        </tr>
+    {% endfor %}
+</table>

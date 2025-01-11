@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trends</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #003366, #28a745);
+            color: #fff;
+            text-align: center;
+        }
+        .news-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .news-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-item a {
+            text-decoration: none;
+            color: #003366;
+        }
+        .sentiment {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Trends</h1>
+    <div class="news-container">
+        {% for trend in trends %}
+        <div class="news-item">
+            <a href="{{ trend.url }}" target="_blank">{{ trend.title }}</a>
+            <p class="sentiment {{ trend.sentiment|lower }}">{{ trend.sentiment }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <canvas id="sentimentChart" width="400" height="200"></canvas>
+    <script>
+        const trends = {{ trends|tojson }};
+        const sentimentData = {
+            Positive: trends.filter(t => t.sentiment === 'Positive').length,
+            Neutral: trends.filter(t => t.sentiment === 'Neutral').length,
+            Negative: trends.filter(t => t.sentiment === 'Negative').length,
+        };
+
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Sentiment Analysis',
+                    data: Object.values(sentimentData),
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Mentor - Your Stock Market Guide</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .navbar {
+            background-color: #003366;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo-img {
+            height: 93px;
+            width: 93px;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 8px 15px;
+            background-color: #28a745;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .hero {
+            background: linear-gradient(to right, rgba(0, 51, 102, 0.8), rgba(40, 167, 69, 0.8)), url("../static/images/hero-background.jpg");
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .cta-btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 20px;
+        }
+        .feature-box {
+            text-align: center;
+            max-width: 300px;
+        }
+        .feature-box i {
+            font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .feature-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .feature-box p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .sections {
+            margin: 40px 20px;
+            text-align: center;
+        }
+        .sections .section-card {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../templates/index.html">
+                <img src="../market mentor.png" alt="Market Mentor Logo" class="logo-img">
+                
+            </a>
+        </div>
+        <ul>
+            <li><a href="../templates/signin.html" class="btn">Sign In</a></li>
+            <li><a href="../templates/signup.html" class="btn">Sign Up</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Empower Your Investment Journey</h2>
+            <p>Track live stocks, build portfolios, and master the market with ease.</p>
+            <a href="#features" class="cta-btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="feature-box">
+            <i class="fas fa-chart-line"></i>
+            <h3>Live Stocks</h3>
+            <p>Access real-time stock prices and trends to make informed decisions.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-briefcase"></i>
+            <h3>Model Portfolio</h3>
+            <p>Practice with virtual portfolios and learn the art of investing.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-bullhorn"></i>
+            <h3>Trending News</h3>
+            <p>Stay updated with the latest news and market insights.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-comments"></i>
+            <h3>Interactive Chatbot</h3>
+            <p>Get answers to your stock market queries with our AI-powered bot.</p>
+        </div>
+    </section>
+
+    <!-- Sections -->
+    <section class="sections">
+        <div class="section-card">
+            <h2>Live Stock Prices</h2>
+            <p>View live prices of stocks and track their performance in real-time.</p>
+        </div>
+        <div class="section-card">
+            <h2>Model Portfolio Practice</h2>
+            <p>Create virtual portfolios to understand the dynamics of investing.</p>
+        </div>
+        <div class="section-card">
+            <h2>Stock Market News</h2>
+            <p>Discover what’s trending in the market and make informed decisions.</p>
+        </div>
+        <div class="section-card">
+            <h2>AI Chatbot</h2>
+            <p>Learn and clarify doubts with a conversational chatbot.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Market Mentor. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
